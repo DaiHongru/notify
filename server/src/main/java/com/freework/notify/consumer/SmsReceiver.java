@@ -33,7 +33,7 @@ public class SmsReceiver {
             String key = MESSAGELOG_SMS_KEY + "_" + smsVo.getMessageId();
             if (!jedisKeys.exists(key)) {
                 jedisStrings.setEx(key, 60 * 60 * 12, DateUtil.getCurrentTimeToString());
-                SmsUtil.sendVerificationSms(smsVo.getPhone(), smsVo.getCode());
+                SmsUtil.sendVerificationSms(smsVo);
             }
             Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
             channel.basicAck(deliveryTag, false);

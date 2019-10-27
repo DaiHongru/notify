@@ -9,6 +9,7 @@ import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.freework.common.loadon.util.DesUtil;
+import com.freework.notify.client.vo.SmsVo;
 import com.freework.notify.exceptions.SmsOperationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,9 @@ public class SmsUtil {
         SmsUtil.templateCode = templateCode;
     }
 
-    public static void sendVerificationSms(String phoneNumber, String code) {
+    public static void sendVerificationSms(SmsVo smsVo) {
+        String phoneNumber = smsVo.getPhone();
+        String code = smsVo.getCode();
         String templateParam = "{\"code\":\"" + code + "\"}";
         DefaultProfile profile = DefaultProfile.getProfile("default", DesUtil.getDecryptString(accessKeyId), DesUtil.getDecryptString(accessKeySecret));
         IAcsClient client = new DefaultAcsClient(profile);

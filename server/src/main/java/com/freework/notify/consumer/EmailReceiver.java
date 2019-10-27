@@ -33,7 +33,11 @@ public class EmailReceiver {
             String key = MESSAGELOG_EMAIL_KEY + "_" + emailVo.getMessageId();
             if (!jedisKeys.exists(key)) {
                 jedisStrings.setEx(key, 60 * 60 * 12, DateUtil.getCurrentTimeToString());
-                EmailUtil.sendEmail(emailVo.getAddress(), emailVo.getHtmlText());
+                if (emailVo.getEnclosureUrl() != null) {
+                    EmailUtil.sendEmailEnclosure(emailVo);
+                } else {
+                    EmailUtil.sendEmail(emailVo);
+                }
             }
             Long deliveryTag = (Long) headers.get(AmqpHeaders.DELIVERY_TAG);
             channel.basicAck(deliveryTag, false);
